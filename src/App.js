@@ -4,7 +4,7 @@ import validate from './validate';
 import {Field, FieldArray, reduxForm, formValueSelector} from "redux-form";
 //import App from './App.css'
 import { connect } from 'react-redux';
-
+var x = -1;
 
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
     <div>
@@ -16,77 +16,149 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
     </div>
 );
 
-let rendertagContainerInfos = ({ fields, meta: { touched, error, submitFailed ,hasEmailValue} }) => (
+function myFunction(fields) {
+    x++;
     
+    fields.push({})
+  
+    console.log(x);
+    console.log("fielsd"+fields);
+}
 
+
+
+let rendertagContainerInfos = ({ fields, meta: { touched, error, submitFailed }, typeValue }) => (
+   
     <ul>
         <li>
-            <button  type="button" onClick={() => fields.push({})}>Add tagContainerInfos</button>
+            <button type="button" onClick={() => myFunction(fields)}>Add tagContainerInfos</button>
             {(touched || submitFailed) && error && <span>{error}</span>}
         </li>
         {fields.map((tagContainerInfos, index) => (
             <li key={index}>
-                <button className= "btn btn-lg btn-success"
+                <button className="btn btn-lg btn-success"
                     type="button"
                     title="Remove tagContainerInfos."
+                  
                     onClick={() => fields.remove(index)}
                 />
-                <h4>tagContainerInfos #{index + 1}</h4>
-             
-                <div>
-                    <label>Favorite Color</label>
-                    <div>
-                        <label htmlFor={`${tagContainerInfos}.hasEmail`}>Has Email?</label>
 
-                        <Field
-                            name={`${tagContainerInfos}.hasEmail`}
-                            id="hasEmail"
-                            component="input"
-                            type="checkbox"
-                        />
+                <h4>tagContainerInfos #{index + 1}</h4>
+
+                <div>
+                   
+                    <div>
+                        <label>Type:</label>
+
+                        <Field name={"protocolInfos[0].plcInfos[0].tagContainerInfos["+x+"].type"} component="select">
+                         <option />
+                        <option value="BLACKBOX">BLACKBOX</option>
+                        <option value="TRIGGERED">TRIGGERED</option>
+                        <option value="POLLING">POLLING</option>
+                        
+                         </Field>
                     </div>
                 </div>
-                {hasEmailValue &&
+
+
+
+                {typeValue === "BLACKBOX" && 
                     <div>
-                        <label>Email</label>
-                        <div>
-                            <Field
-                                name={"email"}
-                                component="input"
-                                type="text"
-                                placeholder="Email"
-                            />
-                        </div>
-                    </div>} <Field
-                    name={`${tagContainerInfos}.messageType`}
+                             
+                    <Field
+                    name={"protocolInfos[0].plcInfos[0].tagContainerInfos[" + x + "].messagetype"}
                     type="text"
                     component={renderField}
                     label="messageType"
-                />
-              
-                 <Field
-                    name={`${tagContainerInfos}.interval`}
+                    />
+
+                     <Field
+                    name={"protocolInfos[0].plcInfos[0].tagContainerInfos[" + x + "].interval"}
                     type="text"
                     component={renderField}
                     label="interval"
-                />
-                 <Field
-                    name={`${tagContainerInfos}.storageSize`}
+                     />        
+                            
+                    <Field
+                    name={"protocolInfos[0].plcInfos[0].tagContainerInfos[" + x + "].storageSize"}
                     type="text"
                     component={renderField}
                     label="storageSize"
-                />
-                <Field
-                    name={`${tagContainerInfos}.resetTags`}
+                     />        
+
+                    <Field
+                    name={"protocolInfos[0].plcInfos[0].tagContainerInfos[" + x + "].resetTags"}
                     type="text"
                     component={renderField}
                     label="resetTags"
-                />
+                    />        
+                    </div>} 
+
+                    {typeValue === "TRIGGERED" && 
+                    <div>
+                             
+                    <Field
+                    name={"protocolInfos[0].plcInfos[0].tagContainerInfos[" + x + "].messagetype"}
+                    type="text"
+                    component={renderField}
+                    label="messageType"
+                    />
+
+                     <Field
+                    name={"protocolInfos[0].plcInfos[0].tagContainerInfos[" + x + "].interval"}
+                    type="text"
+                    component={renderField}
+                    label="interval"
+                     />        
+                            
+                  
+
+                    <Field
+                    name={"protocolInfos[0].plcInfos[0].tagContainerInfos[" + x + "].resetTags"}
+                    type="text"
+                    component={renderField}
+                    label="resetTags"
+                    />        
+                    </div>} 
+
+                    {typeValue === "POLLING" && 
+                    <div>
+                             
+                    <Field
+                    name={"protocolInfos[0].plcInfos[0].tagContainerInfos[" + x + "].messagetype"}
+                    type="text"
+                    component={renderField}
+                    label="messageType"
+                    />
+
+                     <Field
+                    name={"protocolInfos[0].plcInfos[0].tagContainerInfos[" + x + "].interval"}
+                    type="text"
+                    component={renderField}
+                    label="interval"
+                     />        
+                            
+                  
+                    <Field
+                    name={"protocolInfos[0].plcInfos[0].tagContainerInfos[" + x + "].resetTags"}
+                    type="text"
+                    component={renderField}
+                    label="resetTags"
+                    />        
+                    </div>} 
+
+                    
+
                
+                
+                
+
             </li>
         ))}
     </ul>
-     );
+
+
+);
 
 const renderPlcInfos = ({ fields, meta: { error } }) => (
     <ul>
@@ -108,7 +180,7 @@ const renderPlcInfos = ({ fields, meta: { error } }) => (
                     component={renderField}
                     label={`Id`}
                 />
-             <FieldArray name={`${plcInfo}.tagContainerInfos`} component={rendertagContainerInfos} />
+             <FieldArray name={`${plcInfo}.tagContainerInfos`} component={rendertagContainerInfos} rerenderOnEveryChange={true} />
                 
                 
             </li>
@@ -155,13 +227,13 @@ const renderprotocolInfo = ({ fields, meta: { touched, error, submitFailed } }) 
                     component={renderField}
                     label="Communicator"
                 />
-                <FieldArray name={`${protocolInfos}.plcInfo`} component={renderPlcInfos} />
+                <FieldArray name={`${protocolInfos}.plcInfos`} component={renderPlcInfos} />
             </li>
         ))}
     </ul>
 );
 
-const renderQueue = ({ fields, meta: { touched, error, submitFailed } }) => (            
+let renderQueue = ({ fields, meta: { touched, error, submitFailed } }) => (            
         
             
                 <div>
@@ -182,6 +254,9 @@ const renderQueue = ({ fields, meta: { touched, error, submitFailed } }) => (
     
 );
 
+
+
+
 const FieldArraysForm = props => {
     const { handleSubmit, pristine, reset, submitting, } = props;
     
@@ -189,7 +264,7 @@ const FieldArraysForm = props => {
         <form onSubmit={handleSubmit}>
 
 
-           
+       
             <FieldArray name="queue" component={renderQueue} />                               
             <FieldArray name="protocolInfos" component={renderprotocolInfo} />
           
@@ -205,21 +280,34 @@ const FieldArraysForm = props => {
     );
 };
 
+
 const selector = formValueSelector('App')
 
-rendertagContainerInfos = connect(state => {
+
+  rendertagContainerInfos = connect(state => {
   // can select values individually
   
-  let hasEmailValue = selector(state, "hasEmail");
+   let typeValue = selector(state, "protocolInfos[0].plcInfos[0].tagContainerInfos["+x+"].type");
+  console.log(typeValue);
    return { 
-    hasEmailValue
-   
-  };
+    typeValue  
+  }; 
+})(rendertagContainerInfos)   
 
-})(rendertagContainerInfos) 
+
+  rendertagContainerInfos = connect(state => {
+  // can select values individually
+  
+   let tagvalue = selector(state, "protocolInfos[0].plcInfos[0].tagContainerInfos["+x+"]");
+  console.log(tagvalue);
+
+
+})(rendertagContainerInfos)  
 
 
 export default reduxForm({
     form: 'App', // a unique identifier for this form
+   // enableReinitialize: true,
+   destroyOnUnmount: false,
     validate,
 })(FieldArraysForm);
